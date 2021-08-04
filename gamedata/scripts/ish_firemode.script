@@ -1,17 +1,22 @@
 -- FireModeCheck - Nitpicker's Modpack
--- Last modified: 2021.08.04
+-- Last modified: 2021.08.05
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 
-mode_info = {user_mode = "firemode_check_basic"}
+mode_info = {user_mode = "firemode_handler_basic_check"}
+
+local k_PREV = key_bindings.kWPN_FIREMODE_PREV
+local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 
 function on_game_start()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
+
+    mode_info.user_mode = "firemode_handler_dual_key_check"
 end
 
 function ishy_on_key_press(key)
     local bind = dik_to_bind(key)
 
-    if bind == key_bindings.kWPN_FIREMODE_NEXT or bind == key_bindings.kWPN_FIREMODE_PREV then
+    if bind == k_PREV or bind == k_NEXT then
         mode_info.key = key
         mode_info.bind = bind
 
@@ -23,15 +28,29 @@ function ishy_on_key_press(key)
 end
 
 -- Do nothing. Just report the new firing mode after letting the switch go through.
-function firemode_check_basic()
+function firemode_handler_basic_check()
+    show_firemode()
+end
+
+-- NEXT key works normally. PREV key blocks the switch and just reports firing mode.
+function firemode_handler_dual_key_check(mode_info)
+    if mode_info.bind == k_PREV then
+        level.disable_input()
+    end
+
+    show_firemode()
+end
+
+function show_firemode()
     CreateTimeEvent("firemode_check", "show_firemode_delayed", 0, show_firemode_delayed)
 end
 
 function show_firemode_delayed()
+    level.enable_input()
     local current_mode = get_fire_mode()
     local mode_description = firing_mode_descriptions[current_mode]
     show_message(mode_description)
-    return true
+    return true 
 end
 
 function get_fire_mode()

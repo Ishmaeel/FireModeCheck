@@ -1,0 +1,61 @@
+-- FireModeCheck - Nitpicker's Modpack
+-- Last modified: 2021.08.04
+firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
+
+mode_info = {user_mode = "firemode_check_basic"}
+
+function on_game_start()
+    RegisterScriptCallback("on_key_press", ishy_on_key_press)
+end
+
+function ishy_on_key_press(key)
+    local bind = dik_to_bind(key)
+
+    if bind == key_bindings.kWPN_FIREMODE_NEXT or bind == key_bindings.kWPN_FIREMODE_PREV then
+        mode_info.key = key
+        mode_info.bind = bind
+
+        handler = this[mode_info.user_mode]
+        if handler then
+            handler(mode_info)
+        end
+    end
+end
+
+-- Do nothing. Just report the new firing mode after letting the switch go through.
+function firemode_check_basic()
+    CreateTimeEvent("firemode_check", "show_firemode_delayed", 0, show_firemode_delayed)
+end
+
+function show_firemode_delayed()
+    local current_mode = get_fire_mode()
+    local mode_description = firing_mode_descriptions[current_mode]
+    show_message(mode_description)
+    return true
+end
+
+function get_fire_mode()
+    local weapon = db.actor:active_item()
+    if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) or not has_multiple_fire_modes(weapon:section()) then
+        return
+    end
+
+    local cWeapon = weapon:cast_Weapon()
+    return (cWeapon and cWeapon:GetFireMode()) or 0
+end
+
+function has_multiple_fire_modes(section)
+    local fire_modes = parse_list(ini_sys, section, "fire_modes")
+
+    if fire_modes and table.getn(fire_modes) > 1 then
+        return true
+    end
+
+    return false
+end
+
+function show_message(message, ...)
+    if message and actor_menu then
+        actor_menu.set_msg(2, string.format(message, ...), 4)
+    end
+end

@@ -11,18 +11,23 @@ function on_game_start()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
 
     mode_info.user_mode = "firemode_handler_dual_key_check"
+
+    if void_fmode_sound then
+        void_fmode_sound.is_weapon_ready = is_weapon_really_ready -- Compatibility with General Fire Mode Switcher Sound (GFMSS)
+    end
 end
 
 function ishy_on_key_press(key)
     local bind = dik_to_bind(key)
 
     if bind == k_PREV or bind == k_NEXT then
+        mode_info.mute = false
         mode_info.key = key
         mode_info.bind = bind
 
         handler = this[mode_info.user_mode]
         if handler then
-            handler(mode_info)
+            handler()
         end
     end
 end
@@ -33,8 +38,9 @@ function firemode_handler_basic_check()
 end
 
 -- NEXT key works normally. PREV key blocks the switch and just reports firing mode.
-function firemode_handler_dual_key_check(mode_info)
+function firemode_handler_dual_key_check()
     if mode_info.bind == k_PREV then
+        mode_info.mute = true -- We will block firemode switching. Make sure GFMSS does not play the switching sound.
         level.disable_input()
     end
 
@@ -50,7 +56,7 @@ function show_firemode_delayed()
     local current_mode = get_fire_mode()
     local mode_description = firing_mode_descriptions[current_mode]
     show_message(mode_description)
-    return true 
+    return true
 end
 
 function get_fire_mode()
@@ -71,6 +77,15 @@ function has_multiple_fire_modes(section)
     end
 
     return false
+end
+
+function is_weapon_really_ready(wpn)
+    if mode_info.mute then
+        return false
+    end
+
+    local state = wpn:get_state()
+    return state == 0 -- eIdle
 end
 
 function show_message(message, ...)

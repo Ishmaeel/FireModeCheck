@@ -1,10 +1,11 @@
--- FireModeCheck Alpha by Ishmaeel.
+-- FireModeCheck Private Alpha by Ishmaeel.
 -- Last modified: 2021.08.05
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 
 user_modes = {"firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check"}
 
-_user_mode = user_modes[3]
+_user_mode = user_modes[3] -- needs more MCM
+
 _tap_count = nil
 _mute_switch = nil
 

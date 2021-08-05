@@ -1,22 +1,19 @@
--- FireModeCheck - Nitpicker's Modpack
+-- FireModeCheck Alpha by Ishmaeel.
 -- Last modified: 2021.08.05
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 
 user_modes = {"firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check"}
 
 _user_mode = user_modes[3]
-_mute_switch = true
-_tap_count = 0
+_tap_count = nil
+_mute_switch = nil
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 
 function on_game_start()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
-
-    if void_fmode_sound then
-        void_fmode_sound.is_weapon_ready = is_weapon_really_ready -- Compatibility with General Fire Mode Switcher Sound (GFMSS)
-    end
+    take_hostages()
 end
 
 function ishy_on_key_press(key)
@@ -29,6 +26,10 @@ function ishy_on_key_press(key)
         handler = this[_user_mode]
         if handler then
             handler()
+        end
+
+        if not _mute_switch then
+            on_key_press_relay(key)
         end
     end
 end
@@ -43,9 +44,10 @@ end
 function firemode_handler_dual_key_check()
     if _last_bind == k_PREV then
         level.disable_input()
+    else
+        _mute_switch = false
     end
 
-    _mute_switch = false
     show_firemode()
 end
 
@@ -55,13 +57,13 @@ function firemode_handler_single_key_check()
 
     if _tap_count > 1 then
         _tap_count = 0
-        show_firemode()
+        _mute_switch = false
     else
         level.disable_input()
-        show_firemode()
         reset_taps()
-        _mute_switch = false
     end
+
+    show_firemode()
 end
 
 function show_firemode()
@@ -82,7 +84,6 @@ end
 
 function reset_taps_delayed()
     _tap_count = 0
-    _mute_switch = true
     return true
 end
 
@@ -106,17 +107,29 @@ function has_multiple_fire_modes(section)
     return false
 end
 
-function is_weapon_really_ready(wpn)
-    if _mute_switch then
-        return false
-    end
-
-    local state = wpn:get_state()
-    return state == 0 -- eIdle
-end
-
 function show_message(message, ...)
     if message and actor_menu then
         actor_menu.set_msg(2, string.format(message, ...), 4)
     end
+end
+
+--------------------------------------------------------------------------------------------------------------
+------ Compatibility section for General Fire Mode Switcher Sound (GFMSS) by TheVoidPancake + HarukaSai ------
+------      https://www.moddb.com/mods/stalker-anomaly/addons/general-fire-mode-switcher-sound           -----
+--------------------------------------------------------------------------------------------------------------
+
+function take_hostages()
+    -- if GFMSS is installed, monkey patch its key press handler and take it hostage.
+    if void_fmode_sound and void_fmode_sound.on_key_press then
+        on_key_press_relay = void_fmode_sound.on_key_press -- take this and wait for my signal!
+        void_fmode_sound.on_key_press = on_key_press_gatekeeper -- not a peep unless I say so!
+    end
+end
+
+function on_key_press_relay()
+    -- just a placeholder. it will be replaced with GFMSS on_key_press.
+end
+
+function on_key_press_gatekeeper()
+    -- just a void function. it will effectively disable GFMSS on_key_press.
 end

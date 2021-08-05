@@ -1,10 +1,8 @@
--- FireModeCheck Private Alpha by Ishmaeel.
+-- FireModeCheck Public Beta by Ishmaeel.
 -- Last modified: 2021.08.05
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 
 user_modes = {"firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check"}
-
-_user_mode = user_modes[3] -- needs more MCM
 
 _tap_count = nil
 _mute_switch = nil
@@ -14,6 +12,9 @@ local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 
 function on_game_start()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
+    RegisterScriptCallback("on_option_change", on_option_change)
+
+    on_option_change()
     take_hostages()
 end
 
@@ -21,11 +22,11 @@ function ishy_on_key_press(key)
     local bind = dik_to_bind(key)
 
     if bind == k_PREV or bind == k_NEXT then
-        _mute_switch = true -- Make sure GFMSS does not play audio unless we actually allow mode switch.
         _last_bind = bind
 
         handler = this[_user_mode]
         if handler then
+            _mute_switch = true -- Make sure GFMSS does not play audio unless we actually allow mode switch.
             handler()
         end
 
@@ -112,6 +113,11 @@ function show_message(message, ...)
     if message and actor_menu then
         actor_menu.set_msg(2, string.format(message, ...), 4)
     end
+end
+
+function on_option_change()
+    local user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
+    _user_mode = user_modes[user_mode_id]
 end
 
 --------------------------------------------------------------------------------------------------------------

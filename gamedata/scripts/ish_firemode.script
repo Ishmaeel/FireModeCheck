@@ -2,16 +2,16 @@
 -- Last modified: 2021.08.05
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 
-mode_info = {user_mode = "firemode_handler_basic_check", mute = true}
+user_modes = {"firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check"}
+
+_user_mode = user_modes[3]
+_mute = true
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 
 function on_game_start()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
-
-    mode_info.user_mode = "firemode_handler_dual_key_check"
-    mode_info.user_mode = "firemode_handler_single_key_check"
 
     if void_fmode_sound then
         void_fmode_sound.is_weapon_ready = is_weapon_really_ready -- Compatibility with General Fire Mode Switcher Sound (GFMSS)
@@ -22,11 +22,11 @@ function ishy_on_key_press(key)
     local bind = dik_to_bind(key)
 
     if bind == k_PREV or bind == k_NEXT then
-        mode_info.mute = true -- Make sure GFMSS does not play audio unless we actually allow mode switch.
-        mode_info.key = key
-        mode_info.bind = bind
+        _mute = true -- Make sure GFMSS does not play audio unless we actually allow mode switch.
+        _key = key
+        _bind = bind
 
-        handler = this[mode_info.user_mode]
+        handler = this[_user_mode]
         if handler then
             handler()
         end
@@ -35,32 +35,32 @@ end
 
 -- Do nothing. Just report the new firing mode after letting the switch go through.
 function firemode_handler_basic_check()
-    mode_info.mute = false
+    _mute = false
     show_firemode()
 end
 
 -- NEXT key works normally. PREV key blocks the switch and just reports firing mode.
 function firemode_handler_dual_key_check()
-    if mode_info.bind == k_PREV then
+    if _bind == k_PREV then
         level.disable_input()
     end
 
-    mode_info.mute = false
+    _mute = false
     show_firemode()
 end
 
 -- Both keys function in the same way: Single tap: check only. Double tap, switch to next/prev mode.
 function firemode_handler_single_key_check()
-    mode_info.tap = (mode_info.tap or 0) + 1
+    _tap = (_tap or 0) + 1
 
-    if mode_info.tap > 1 then
-        mode_info.tap = 0
+    if _tap > 1 then
+        _tap = 0
         show_firemode()
     else
         level.disable_input()
         show_firemode()
         reset_taps()
-        mode_info.mute = false
+        _mute = false
     end
 end
 
@@ -81,8 +81,8 @@ function reset_taps()
 end
 
 function reset_taps_delayed()
-    mode_info.tap = 0
-    mode_info.mute = true
+    _tap = 0
+    _mute = true
     return true
 end
 
@@ -107,8 +107,7 @@ function has_multiple_fire_modes(section)
 end
 
 function is_weapon_really_ready(wpn)
-    d.info("Mute: %s", mode_info.mute)
-    if mode_info.mute then
+    if _mute then
         return false
     end
 

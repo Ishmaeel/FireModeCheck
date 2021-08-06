@@ -11,6 +11,6 @@ Choose from three operation modes:
 * **Dual Key Mode**: <kbd>Previous Firing Mode</kbd> key displays the current mode without switching. <kbd>Next Firing Mode</kbd> key cycles between firing modes.
 * **Single Key Mode**: Both hotkeys work in the same way: Single tap for displaying current mode, double tap for switching modes. Helps free up one keybinding.
 
-By default, on-screen firing mode indicator is hidden and the *Single Key Mode* is active. This configuration can be changed via MCM. 
+By default, on-screen firing mode indicator is hidden and the *Single Key Mode* is active. This configuration can be changed via [MCM](https://www.moddb.com/mods/stalker-anomaly/addons/anomaly-mod-configuration-menu). 
 
 https://github.com/Ishmaeel/NitpickerModpack

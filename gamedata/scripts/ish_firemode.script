@@ -1,11 +1,14 @@
--- FireModeCheck Public Beta by Ishmaeel.
--- Last modified: 2021.08.05
+-- FireModeCheck
+-- Last modified: 2021.08.06
+-- https://github.com/Ishmaeel/NitpickerModpack
+
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 
 user_modes = {"firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check"}
 
 _tap_count = nil
 _mute_switch = nil
+_hide_gui = nil
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
@@ -13,8 +16,8 @@ local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 function on_game_start()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
     RegisterScriptCallback("on_option_change", on_option_change)
+    RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
 
-    on_option_change()
     take_hostages()
 end
 
@@ -115,9 +118,22 @@ function show_message(message, ...)
     end
 end
 
+function actor_on_first_update()
+    on_option_change()
+end
+
 function on_option_change()
     local user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
     _user_mode = user_modes[user_mode_id]
+    _hide_gui = (ui_mcm and ui_mcm.get("fireModeCheck/hideGui")) or (not ui_mcm and true)
+
+    toggle_firemode_gui()
+end
+
+function toggle_firemode_gui()
+    pos = ActorMenu.get_maingame().m_ui_hud_states.m_fire_mode:GetWndPos()
+    pos.x = ((_hide_gui and pos.x > 0) or ((not _hide_gui) and pos.x < 0)) and (-1 * pos.x) or pos.x -- Raven, no!
+    ActorMenu.get_maingame().m_ui_hud_states.m_fire_mode:SetWndPos(pos)
 end
 
 --------------------------------------------------------------------------------------------------------------

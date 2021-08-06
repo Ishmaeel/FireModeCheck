@@ -1,6 +1,6 @@
 -- FireModeCheck
 -- Last modified: 2021.08.06
--- https://github.com/Ishmaeel/NitpickerModpack
+-- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
 

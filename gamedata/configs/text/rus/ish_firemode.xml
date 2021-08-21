@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<string_table>
+	<string id="ui_mcm_menu_fireModeCheck">
+		<text>Режим огня</text>
+	</string>
+	<string id="ui_mcm_fireModeCheck_title">
+		<text>Настройка проверки режима огня</text>
+	</string>
+	<string id="ui_mcm_fireModeCheck_userMode">
+		<text>Способ проверки предпочтительного режима стрельбы</text>
+	</string>
+	<string id="ui_mcm_fireModeCheck_userMode_desc">
+		<text>%c[d_green]•%c[DEFAULT] Основное: Поведение кнопок переключения режима стрельбы не изменилось. Новый режим отображается после переключения.
+\n \n%c[d_green]•%c[DEFAULT] Двойная клавиша: клавиша "Предыдущий режим стрельбы" отображает текущий режим без переключения. "Следующий режим стрельбы" ключевые циклы между режимами стрельбы.
+\n \n%c[d_green]•%c[DEFAULT] Одна клавиша: Обе горячие клавиши работают одинаково: одно нажатие для отображения текущего режима, двойное нажатие для переключения режимов. Помогает освободить одну привязку клавиш.</text>
+	</string>
+	<string id="ui_mcm_fireModeCheck_hideGui">
+		<text>Скрыть индикатор режима стрельбы</text>
+	</string>
+	<string id="ui_mcm_fireModeCheck_hideGui_desc">
+		<text>Скрыть экранный индикатор режима стрельбы в HUD.</text>
+	</string>
+	<string id="ui_mcm_lst_disabled">
+		<text>%c[ui_gray]Отключено</text>
+	</string>
+	<string id="ui_mcm_lst_basic">
+		<text>Основной</text>
+	</string>
+	<string id="ui_mcm_lst_dual_key">
+		<text>Двойная клавиша</text>
+	</string>
+	<string id="ui_mcm_lst_single_key">
+		<text>Одна клавиша (рекомендуется)</text>
+	</string>
+</string_table>
+

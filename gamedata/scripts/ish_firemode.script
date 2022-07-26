@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.07.26
+-- Last modified: 2022.07.27
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -13,7 +13,12 @@ local _hide_gui = false
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 
+local disable_input = nil
+local enable_input = nil
+
 function on_game_start()
+    perform_setup()
+
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
     RegisterScriptCallback("on_option_change", on_option_change)
     RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
@@ -48,7 +53,7 @@ end
 -- NEXT key works normally. PREV key blocks the switch and just reports firing mode.
 function firemode_handler_dual_key_check()
     if _last_bind == k_PREV then
-        level.disable_input()
+        disable_input()
     else
         _mute_switch = false
     end
@@ -64,7 +69,7 @@ function firemode_handler_single_key_check()
         _tap_count = 0
         _mute_switch = false
     else
-        level.disable_input()
+        disable_input()
         reset_taps()
     end
 
@@ -76,7 +81,7 @@ function show_firemode()
 end
 
 function show_firemode_delayed()
-    level.enable_input()
+    enable_input()
     local current_mode = get_fire_mode()
     local mode_description = firing_mode_descriptions[current_mode]
     show_message(mode_description)
@@ -171,4 +176,24 @@ end
 
 function on_key_press_gatekeeper(key)
     -- just a void function. it will effectively disable GFMSS on_key_press.
+end
+
+--------------------------------------------------------------------------------------------------------------
+------                            Compatibility section for 1.5.1 and 1.5.2                             ------
+--------------------------------------------------------------------------------------------------------------
+
+function perform_setup()
+    local modern_mode = (axr_main.callback_add ~= nil)
+
+    if modern_mode then
+        enable_input = do_not_mess_with_the_input
+        disable_input = do_not_mess_with_the_input
+    else
+        enable_input = level.enable_input
+        disable_input = level.disable_input
+    end
+end
+
+function do_not_mess_with_the_input()
+    -- just a void function. Anomaly 1.5.2 has a better way to cancel a keypress.
 end

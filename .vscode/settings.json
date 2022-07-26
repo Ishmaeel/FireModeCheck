@@ -1,0 +1,23 @@
+{
+    "Lua.diagnostics.globals": [
+        "actor_menu",
+        "ActorMenu",
+        "CreateTimeEvent",
+        "db",
+        "dik_to_bind",
+        "ini_sys",
+        "IsItem",
+        "IsWeapon",
+        "key_bindings",
+        "level",
+        "parse_list",
+        "RegisterScriptCallback",
+        "this",
+        "ui_mcm",
+        "void_fmode_sound"
+    ],
+    "Lua.diagnostics.disable": [
+        "deprecated",
+        "lowercase-global"
+    ]
+}

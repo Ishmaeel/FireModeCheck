@@ -1,14 +1,14 @@
 -- FireModeCheck
--- Last modified: 2021.08.08
+-- Last modified: 2022.07.26
 -- https://github.com/Ishmaeel/FireModeCheck
 
-firing_mode_descriptions = {[1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto"}
+firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
 
-user_modes = {"firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check"}
+user_modes = { "firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check" }
 
-_tap_count = nil
-_mute_switch = nil
-_hide_gui = nil
+local _tap_count = 0
+local _mute_switch = false
+local _hide_gui = false
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
@@ -94,7 +94,8 @@ end
 
 function get_fire_mode()
     local weapon = db.actor:active_item()
-    if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) or not has_multiple_fire_modes(weapon) then
+    if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) or
+        not has_multiple_fire_modes(weapon) then
         return
     end
 
@@ -164,10 +165,10 @@ function take_hostages()
     end
 end
 
-function on_key_press_relay()
+function on_key_press_relay(key)
     -- just a placeholder. it will be replaced with GFMSS on_key_press.
 end
 
-function on_key_press_gatekeeper()
+function on_key_press_gatekeeper(key)
     -- just a void function. it will effectively disable GFMSS on_key_press.
 end

@@ -5,10 +5,13 @@
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
 
 user_modes = { "firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check" }
+suppress_modes = { "suppress_key_basic_check", "suppress_key_dual_key_check", "suppress_key_single_key_check" }
 
 local _tap_count = 0
 local _mute_switch = false
 local _hide_gui = false
+local _user_mode = nil
+local _suppress_mode = nil
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
@@ -18,11 +21,6 @@ local enable_input = nil
 
 function on_game_start()
     perform_setup()
-
-    RegisterScriptCallback("on_key_press", ishy_on_key_press)
-    RegisterScriptCallback("on_option_change", on_option_change)
-    RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
-
     take_hostages()
 end
 
@@ -74,6 +72,31 @@ function firemode_handler_single_key_check()
     end
 
     show_firemode()
+end
+
+function ishy_on_before_key_press(dik, bind, dis, flags)
+    if bind == k_PREV or bind == k_NEXT then
+        suppress_handler = this[_suppress_mode]
+        if suppress_handler then
+            local allow_keypress = not suppress_handler()
+            flags.ret_value = allow_keypress
+        end
+    end
+end
+
+-- basic mode never prevents firemode change
+function suppress_key_basic_check()
+    return false
+end
+
+-- dual mode only prevents firemode change with the PREV key
+function suppress_key_dual_key_check()
+    return (_last_bind == k_PREV)
+end
+
+-- single mode only prevents firemode change for the first tap
+function suppress_key_single_key_check()
+    return (_tap_count == 1)
 end
 
 function show_firemode()
@@ -146,6 +169,7 @@ end
 function on_option_change()
     local user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
     _user_mode = user_modes[user_mode_id]
+    _suppress_mode = suppress_modes[user_mode_id]
     _hide_gui = (ui_mcm and ui_mcm.get("fireModeCheck/hideGui")) or (not ui_mcm and true)
 
     toggle_firemode_gui()
@@ -188,10 +212,16 @@ function perform_setup()
     if modern_mode then
         enable_input = do_not_mess_with_the_input
         disable_input = do_not_mess_with_the_input
+
+        RegisterScriptCallback("on_before_key_press", ishy_on_before_key_press)
     else
         enable_input = level.enable_input
         disable_input = level.disable_input
     end
+
+    RegisterScriptCallback("on_key_press", ishy_on_key_press)
+    RegisterScriptCallback("on_option_change", on_option_change)
+    RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
 end
 
 function do_not_mess_with_the_input()

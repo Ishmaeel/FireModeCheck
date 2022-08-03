@@ -1,11 +1,13 @@
 -- FireModeCheck
--- Last modified: 2022.08.03
+-- Last modified: 2022.08.04
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
 
 user_modes = { "firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check" }
 suppress_modes = { "suppress_key_basic_check", "suppress_key_dual_key_check", "suppress_key_single_key_check" }
+
+display_duration = 4 -- seconds
 
 local _tap_count = 0
 local _mute_switch = false
@@ -159,7 +161,7 @@ end
 
 function show_message(message, ...)
     if message and actor_menu then
-        actor_menu.set_msg(2, string.format(message, ...), 4)
+        actor_menu.set_msg(2, string.format(message, ...), ish_firemode.display_duration)
     end
 end
 

@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.07.27
+-- Last modified: 2022.08.03
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -108,6 +108,7 @@ function show_firemode_delayed()
     local current_mode = get_fire_mode()
     local mode_description = firing_mode_descriptions[current_mode]
     show_message(mode_description)
+    show_indicator(mode_description)
     return true
 end
 
@@ -159,6 +160,12 @@ end
 function show_message(message, ...)
     if message and actor_menu then
         actor_menu.set_msg(2, string.format(message, ...), 4)
+    end
+end
+
+function show_indicator(indicator, ...)
+    if indicator and ish_firemode_hud then
+        ish_firemode_hud.show_indicator(indicator)
     end
 end
 

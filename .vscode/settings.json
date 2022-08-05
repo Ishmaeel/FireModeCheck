@@ -12,6 +12,7 @@
         "FireModeHUD",
         "Frect",
         "get_hud",
+        "ini_file",
         "ini_sys",
         "ish_firemode_hud",
         "ish_firemode",

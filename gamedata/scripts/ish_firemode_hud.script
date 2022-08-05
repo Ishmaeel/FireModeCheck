@@ -1,22 +1,27 @@
 -- FireModeCheck
--- Last modified: 2022.08.04
+-- Last modified: 2022.08.06
 -- https://github.com/Ishmaeel/FireModeCheck
 
 local firing_mode_icons = { ["Single"] = 0, ["Burst"] = 1, ["Full-Auto"] = 2 }
+local weapon_classes = { ["HK"] = 0, ["AK"] = 1, ["AR"] = 2 }
+
 local tile_size = 256
 local HUD = nil
 
 local firing_mode_indicator
 
-function show_indicator(firing_mode)
+function show_indicator(firing_mode, weapon_class)
 	if not firing_mode_indicator then
 		activate_hud()
 	end
 
 	icon_index = firing_mode_icons[firing_mode] or 0
-	offset = icon_index * tile_size
+	col_offset = icon_index * tile_size
 
-	firing_mode_indicator:SetTextureRect(Frect():set(offset, 0, offset + tile_size, tile_size))
+	icon_class = weapon_classes[weapon_class] or 0
+	row_offset = icon_class * tile_size
+
+	firing_mode_indicator:SetTextureRect(Frect():set(col_offset, row_offset, col_offset + tile_size, row_offset + tile_size))
 	firing_mode_indicator:Show(true);
 
 	CreateTimeEvent("fmc_event", "fmc_hide", ish_firemode.display_duration - 1, hide_indicator)

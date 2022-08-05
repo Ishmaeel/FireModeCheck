@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.04
+-- Last modified: 2022.08.06
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -107,10 +107,10 @@ end
 
 function show_firemode_delayed()
     enable_input()
-    local current_mode = get_fire_mode()
+    local current_mode, weapon_section = get_fire_mode_and_section()
     local mode_description = firing_mode_descriptions[current_mode]
     show_message(mode_description)
-    show_indicator(mode_description)
+    show_indicator(mode_description, weapon_section)
     return true
 end
 
@@ -123,7 +123,7 @@ function reset_taps_delayed()
     return true
 end
 
-function get_fire_mode()
+function get_fire_mode_and_section()
     local weapon = db.actor:active_item()
     if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) or
         not has_multiple_fire_modes(weapon) then
@@ -131,7 +131,7 @@ function get_fire_mode()
     end
 
     local cWeapon = weapon:cast_Weapon()
-    return (cWeapon and cWeapon:GetFireMode()) or 0
+    return (cWeapon and cWeapon:GetFireMode()) or 0, weapon:section()
 end
 
 function has_multiple_fire_modes(weapon)
@@ -165,9 +165,9 @@ function show_message(message, ...)
     end
 end
 
-function show_indicator(indicator, ...)
+function show_indicator(indicator, weapon_section)
     if indicator and ish_firemode_hud then
-        ish_firemode_hud.show_indicator(indicator)
+        ish_firemode_hud.show_indicator(indicator, weapon_section)
     end
 end
 

@@ -3,7 +3,7 @@
 -- https://github.com/Ishmaeel/FireModeCheck
 
 local firing_mode_icons = { ["Single"] = 0, ["Burst"] = 1, ["Full-Auto"] = 2 }
-local selector_types = { ["HK"] = 0, ["AK"] = 1, ["AR"] = 2 }
+local selector_types = { ["HK3"] = 0, ["HK2"] = 1, ["AK3"] = 2, ["AK2"] = 3, ["AR3"] = 4, ["AR2"] = 5 }
 
 local defs_ini = ini_file("ish_firemode.ltx")
 

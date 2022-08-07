@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.06
+-- Last modified: 2022.08.08
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -9,11 +9,15 @@ suppress_modes = { "suppress_key_basic_check", "suppress_key_dual_key_check", "s
 
 display_duration = 4 -- seconds
 
+local DISPLAY_TEXT = 1
+local DISPLAY_IMAGE = 2
+
 local _tap_count = 0
 local _mute_switch = false
 local _hide_gui = false
 local _user_mode = nil
 local _suppress_mode = nil
+local _display_Mode = DISPLAY_TEXT + DISPLAY_IMAGE
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
@@ -109,8 +113,15 @@ function show_firemode_delayed()
     enable_input()
     local current_mode, weapon_section = get_fire_mode_and_section()
     local mode_description = firing_mode_descriptions[current_mode]
-    show_message(mode_description)
-    show_indicator(mode_description, weapon_section)
+
+    if bit_and(_display_Mode, DISPLAY_TEXT) > 0 then
+        show_message(mode_description)
+    end
+
+    if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
+        show_indicator(mode_description, weapon_section)
+    end
+
     return true
 end
 
@@ -180,6 +191,7 @@ function on_option_change()
     _user_mode = user_modes[user_mode_id]
     _suppress_mode = suppress_modes[user_mode_id]
     _hide_gui = (ui_mcm and ui_mcm.get("fireModeCheck/hideGui")) or (not ui_mcm and true)
+    _display_Mode = (ui_mcm and ui_mcm.get("fireModeCheck/displayMode")) or DISPLAY_TEXT + DISPLAY_IMAGE
 
     toggle_firemode_gui()
 end

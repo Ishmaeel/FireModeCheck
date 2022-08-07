@@ -1,13 +1,16 @@
+-- FireModeCheck
+-- Last modified: 2022.08.08
+-- https://github.com/Ishmaeel/FireModeCheck
+
 function on_mcm_load()
     op = {
         id = "fireModeCheck",
         sh = true,
         gr = {
-            -- LuaFormatter off
-            { id = "title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_fireModeCheck_title", size = {512, 50}, spacing = 20 },
-            { id = "userMode", type = "radio_v", val = 2, def = 3, content = { {0, "disabled"}, {1, "basic"}, {2, "dual_key"}, {3, "single_key"} } },
+            { id = "title", type = "slide", link = "ui_options_slider_player", text = "ui_mcm_fireModeCheck_title", size = { 512, 50 }, spacing = 20 },
+            { id = "userMode", type = "radio_v", val = 2, def = 3, content = { { 0, "disabled" }, { 1, "basic" }, { 2, "dual_key" }, { 3, "single_key" } } },
+            { id = "displayMode", type = "radio_h", val = 2, def = 3, content = { { 3, "full" }, { 1, "text_only" }, { 2, "image_only" } } },
             { id = "hideGui", type = "check", val = 1, def = true }
-            -- LuaFormatter on
         }
     }
     return op

@@ -1,0 +1,66 @@
+-- FireModeCheck
+-- Last modified: 2022.08.07
+-- https://github.com/Ishmaeel/FireModeCheck
+
+local firing_mode_icons = { ["Single"] = 0, ["Burst"] = 1, ["Full-Auto"] = 2 }
+local selector_types = { ["HK_burst3"] = 1, ["HK_no_burst"] = 2, ["AK_burst3"] = 3, ["AK_no_burst"] = 4, ["AR_burst3"] = 5, ["AR_no_burst"] = 6 }
+
+local defs_ini = ini_file("ish_firemode.ltx")
+
+local tile_size = 256
+local HUD = nil
+
+local firing_mode_indicator
+
+function show_indicator(firing_mode, weapon_section)
+	if not firing_mode_indicator then
+		activate_hud()
+	end
+
+	weapon_parent_section = ini_sys:r_string_ex(weapon_section, "parent_section") or weapon_section
+	indicator_type = defs_ini:r_string_ex("selector_types", weapon_parent_section)
+
+	printf("= Indicator type %s for %s (%s)", indicator_type, weapon_section, weapon_parent_section)
+
+	icon_type = selector_types[indicator_type] or 0
+	row_offset = icon_type * tile_size
+
+	icon_index = firing_mode_icons[firing_mode] or 0
+	col_offset = icon_index * tile_size
+
+	firing_mode_indicator:SetTextureRect(Frect():set(col_offset, row_offset, col_offset + tile_size, row_offset + tile_size))
+	firing_mode_indicator:Show(true);
+
+	CreateTimeEvent("fmc_event", "fmc_hide", ish_firemode.display_duration - 1, hide_indicator)
+end
+
+function hide_indicator()
+	firing_mode_indicator:Show(false)
+	return true
+end
+
+function activate_hud()
+	RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
+
+	if HUD == nil then
+		HUD = FireModeHUD()
+		get_hud():AddDialogToRender(HUD)
+	end
+end
+
+function actor_on_net_destroy()
+	if HUD ~= nil then
+		get_hud():RemoveDialogToRender(HUD)
+		HUD = nil
+	end
+end
+
+class "FireModeHUD" (CUIScriptWnd)
+
+function FireModeHUD:__init() super()
+	xml = CScriptXmlInit()
+	xml:ParseFile("ish_firemode_hud.xml")
+
+	firing_mode_indicator = xml:InitStatic("fireMode", self)
+	firing_mode_indicator:InitTexture("ui\\indicators")
+end

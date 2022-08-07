@@ -3,16 +3,27 @@
         "actor_menu",
         "ActorMenu",
         "axr_main",
+        "bit_and",
+        "class",
         "CreateTimeEvent",
+        "CScriptXmlInit",
+        "CUIScriptWnd",
         "db",
         "dik_to_bind",
+        "FireModeHUD",
+        "Frect",
+        "get_hud",
+        "ini_file",
         "ini_sys",
+        "ish_firemode_hud",
+        "ish_firemode",
         "IsItem",
         "IsWeapon",
         "key_bindings",
         "level",
         "parse_list",
         "RegisterScriptCallback",
+        "super",
         "this",
         "ui_mcm",
         "void_fmode_sound"
@@ -20,5 +31,8 @@
     "Lua.diagnostics.disable": [
         "deprecated",
         "lowercase-global"
-    ]
+    ],
+    "Lua.format.defaultConfig": {
+        "max_line_length": "200"
+    }
 }

@@ -4,10 +4,10 @@
 		<text>Fire Mode Check</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_title">
-		<text>Настройка проверки режима огня</text>
+		<text>Настройка проверки режима стрельбы</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_userMode">
-		<text>Способ проверки режима огня</text>
+		<text>Способ проверки режима стрельбы</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_userMode_desc">
 		<text>%c[d_green]•%c[DEFAULT] Основной: Поведение кнопок переключения режима стрельбы не изменилось. Новый режим отображается после переключения.

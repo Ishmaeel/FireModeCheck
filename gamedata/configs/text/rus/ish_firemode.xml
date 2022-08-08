@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <string_table>
 	<string id="ui_mcm_menu_fireModeCheck">
-		<text>Режим огня</text>
+		<text>Fire Mode Check</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_title">
 		<text>Настройка проверки режима огня</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_userMode">
-		<text>Способ проверки предпочтительного режима стрельбы</text>
+		<text>Способ проверки режима огня</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_userMode_desc">
-		<text>%c[d_green]•%c[DEFAULT] Основное: Поведение кнопок переключения режима стрельбы не изменилось. Новый режим отображается после переключения.
+		<text>%c[d_green]•%c[DEFAULT] Основной: Поведение кнопок переключения режима стрельбы не изменилось. Новый режим отображается после переключения.
 \n \n%c[d_green]•%c[DEFAULT] Двойная клавиша: клавиша "Предыдущий режим стрельбы" отображает текущий режим без переключения. "Следующий режим стрельбы" ключевые циклы между режимами стрельбы.
 \n \n%c[d_green]•%c[DEFAULT] Одна клавиша: Обе горячие клавиши работают одинаково: одно нажатие для отображения текущего режима, двойное нажатие для переключения режимов. Помогает освободить одну привязку клавиш.</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_displayMode">
-		<text>Display style</text>
+		<text>Режим отображения</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_displayMode_desc">
-		<text>Fire Mode Check Indicator display style</text>
+		<text>Стиль отображения индикатора переводчика огня.</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_hideGui">
-		<text>Скрыть индикатор режима стрельбы</text>
+		<text>Скрыть оригнальный индикатор переводчика огня</text>
 	</string>
 	<string id="ui_mcm_fireModeCheck_hideGui_desc">
-		<text>Скрыть экранный индикатор режима стрельбы в HUD.</text>
+		<text>Скрыть индикатор переводчика огня, предоставляемый в игре поумолчанию.</text>
 	</string>
 	<string id="ui_mcm_lst_disabled">
 		<text>%c[ui_gray]Отключено</text>
@@ -39,12 +39,12 @@
 		<text>Одна клавиша (рекомендуется)</text>
 	</string>
 	<string id="ui_mcm_lst_full">
-		<text>Full</text>
+		<text>Полный</text>
 	</string>
 	<string id="ui_mcm_lst_text_only">
-		<text>Text only</text>
+		<text>Только текст</text>
 	</string>
 	<string id="ui_mcm_lst_image_only">
-		<text>Image only</text>
+		<text>Только изображение</text>
 	</string>
 </string_table>

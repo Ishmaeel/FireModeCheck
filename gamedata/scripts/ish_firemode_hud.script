@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.07
+-- Last modified: 2022.08.10
 -- https://github.com/Ishmaeel/FireModeCheck
 
 local firing_mode_icons = { ["Single"] = 0, ["Burst"] = 1, ["Full-Auto"] = 2 }
@@ -20,7 +20,7 @@ function show_indicator(firing_mode, weapon_section)
 	weapon_parent_section = ini_sys:r_string_ex(weapon_section, "parent_section") or weapon_section
 	indicator_type = defs_ini:r_string_ex("selector_types", weapon_parent_section)
 
-	printf("= Indicator type %s for %s (%s)", indicator_type, weapon_section, weapon_parent_section)
+	printf("= Indicator type for %s (%s) is %s", weapon_section, weapon_parent_section, indicator_type)
 
 	icon_type = selector_types[indicator_type] or 0
 	row_offset = icon_type * tile_size

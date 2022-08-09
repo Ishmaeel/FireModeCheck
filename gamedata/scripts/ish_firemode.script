@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.08
+-- Last modified: 2022.08.09
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -136,38 +136,48 @@ end
 
 function get_fire_mode_and_section()
     local weapon = db.actor:active_item()
-    if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) or
-        not has_multiple_fire_modes(weapon) then
+    if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) then
+        return
+    end
+
+    local has_multiple_modes, firemode_upgrade = get_multiple_fire_modes_and_upgrade(weapon)
+    if not has_multiple_modes then
         return
     end
 
     local cWeapon = weapon:cast_Weapon()
-    return (cWeapon and cWeapon:GetFireMode()) or 0, weapon:section()
+
+    local firemode = (cWeapon and cWeapon:GetFireMode()) or 0
+    local section = table.concat({ weapon:section(), firemode_upgrade }, "_")
+
+    return firemode, section
 end
 
-function has_multiple_fire_modes(weapon)
+function get_multiple_fire_modes_and_upgrade(weapon)
     section = weapon:section()
+
+    local has_multiple_fire_modes = false
+    local installed_upgrade_section = nil
 
     local fire_modes = parse_list(ini_sys, section, "fire_modes")
 
     if fire_modes and table.getn(fire_modes) > 1 then
-        return true
+        has_multiple_fire_modes = true
     end
-
-    local has_firemode_upgrade = false
 
     weapon:iterate_installed_upgrades(function(upgr_sec)
         local upgr_prop_sec = ini_sys:r_string_ex(upgr_sec, "section")
         if upgr_prop_sec then
             local upgr_fire_modes = parse_list(ini_sys, upgr_prop_sec, "fire_modes")
             if upgr_fire_modes and table.getn(upgr_fire_modes) > 1 then
-                has_firemode_upgrade = true
+                has_multiple_fire_modes = true
+                installed_upgrade_section = upgr_sec
                 return true
             end
         end
     end)
 
-    return has_firemode_upgrade
+    return has_multiple_fire_modes, installed_upgrade_section
 end
 
 function show_message(message, ...)

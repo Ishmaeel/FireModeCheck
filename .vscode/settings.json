@@ -34,5 +34,9 @@
     ],
     "Lua.format.defaultConfig": {
         "max_line_length": "200"
-    }
+    },
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.workspace.library": [
+        "C:\\Games\\Anomaly Unpacked\\1.5.2\\scripts"
+    ]
 }

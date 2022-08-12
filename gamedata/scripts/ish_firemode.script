@@ -111,15 +111,17 @@ end
 
 function show_firemode_delayed()
     enable_input()
-    local current_mode, weapon_section = get_fire_mode_and_section()
+    local current_mode, selector_type, weapon_section = get_fire_mode_data()
     local mode_description = firing_mode_descriptions[current_mode]
 
-    if bit_and(_display_Mode, DISPLAY_TEXT) > 0 then
-        show_message(mode_description)
-    end
+    if mode_description then
+        if bit_and(_display_Mode, DISPLAY_TEXT) > 0 then
+            show_message(mode_description)
+        end
 
-    if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
-        show_indicator(mode_description, weapon_section)
+        if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
+            show_indicator(mode_description, selector_type)
+        end
     end
 
     return true
@@ -134,7 +136,7 @@ function reset_taps_delayed()
     return true
 end
 
-function get_fire_mode_and_section()
+function get_fire_mode_data()
     local weapon = db.actor:active_item()
     if weapon == nil or not IsWeapon(weapon) or IsItem("fake_ammo_wpn", nil, weapon) then
         return
@@ -147,10 +149,11 @@ function get_fire_mode_and_section()
 
     local cWeapon = weapon:cast_Weapon()
 
-    local firemode = (cWeapon and cWeapon:GetFireMode()) or 0
-    local section = table.concat({ weapon:section(), firemode_upgrade }, "_")
+    local fire_mode = (cWeapon and cWeapon:GetFireMode()) or 0
+    local weapon_section = weapon:section()
+    local selector_type = table.concat({ weapon_section, firemode_upgrade }, "_")
 
-    return firemode, section
+    return fire_mode, selector_type, weapon_section
 end
 
 function get_animation_duration(section)
@@ -160,7 +163,7 @@ function get_animation_duration(section)
 end
 
 function get_multiple_fire_modes_and_upgrade(weapon)
-    section = weapon:section()
+    local section = weapon:section()
 
     local has_multiple_fire_modes = false
     local installed_upgrade_section = nil

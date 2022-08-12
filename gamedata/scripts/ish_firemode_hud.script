@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.10
+-- Last modified: 2022.08.13
 -- https://github.com/Ishmaeel/FireModeCheck
 
 local firing_mode_icons = { ["Single"] = 0, ["Burst"] = 1, ["Full-Auto"] = 2 }
@@ -11,6 +11,22 @@ local tile_size = 256
 local HUD = nil
 
 local firing_mode_indicator
+local firing_mode_text
+
+function show_text(firing_mode)
+	if not firing_mode_text then
+		activate_hud()
+	end
+
+	firing_mode_text:TextControl():SetTextST(firing_mode)
+
+	CreateTimeEvent("fmc_event", "fmc_hide_text", ish_firemode.display_duration, hide_text)
+end
+
+function hide_text(firing_mode)
+	show_text("")
+	return true
+end
 
 function show_indicator(firing_mode, weapon_section)
 	if not firing_mode_indicator then
@@ -31,7 +47,7 @@ function show_indicator(firing_mode, weapon_section)
 	firing_mode_indicator:SetTextureRect(Frect():set(col_offset, row_offset, col_offset + tile_size, row_offset + tile_size))
 	firing_mode_indicator:Show(true);
 
-	CreateTimeEvent("fmc_event", "fmc_hide", ish_firemode.display_duration - 1, hide_indicator)
+	CreateTimeEvent("fmc_event", "fmc_hide_indicator", ish_firemode.display_duration, hide_indicator)
 end
 
 function hide_indicator()
@@ -63,4 +79,7 @@ function FireModeHUD:__init() super()
 
 	firing_mode_indicator = xml:InitStatic("fireMode", self)
 	firing_mode_indicator:InitTexture("ui\\indicators")
+
+	firing_mode_text = xml:InitStatic("fireMode_text", self)
+	firing_mode_text:TextControl():SetTextST("")
 end

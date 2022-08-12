@@ -187,8 +187,8 @@ function get_multiple_fire_modes_and_upgrade(weapon)
 end
 
 function show_message(message, ...)
-    if message and actor_menu then
-        actor_menu.set_msg(2, string.format(message, ...), ish_firemode.display_duration)
+    if message and ish_firemode_hud then
+        ish_firemode_hud.show_text(message)
     end
 end
 

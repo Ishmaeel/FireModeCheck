@@ -1,3 +1,7 @@
 <indicators>
 	<fireMode x="512" y="620" width="96" height="128" stretch="1" alignment="c" />
+
+	<fireMode_text x="200" y="700" width="624" height="30">
+		<text font="graffiti22" r="240" g="217" b="182" a="255" align="c"></text>
+	</fireMode_text>
 </indicators>

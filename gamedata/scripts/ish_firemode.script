@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.09
+-- Last modified: 2022.08.13
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -151,6 +151,12 @@ function get_fire_mode_and_section()
     local section = table.concat({ weapon:section(), firemode_upgrade }, "_")
 
     return firemode, section
+end
+
+function get_animation_duration(section)
+    local hud_sec = ini_sys:r_string_ex(section, "hud")
+    local anim_data = parse_list(ini_sys, hud_sec, "anm_switch_mode")
+    return tonumber(anim_data[3] or 0)
 end
 
 function get_multiple_fire_modes_and_upgrade(weapon)

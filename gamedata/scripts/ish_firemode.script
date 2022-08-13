@@ -118,7 +118,7 @@ end
 
 function show_firemode_delayed()
     enable_input()
-    local current_mode, selector_type, weapon_section = get_fire_mode_data()
+    local current_mode, selector_type = get_fire_mode_data()
     local mode_description = firing_mode_descriptions[current_mode]
 
     if mode_description then
@@ -169,16 +169,9 @@ function get_fire_mode_data()
     local cWeapon = weapon:cast_Weapon()
 
     local fire_mode = (cWeapon and cWeapon:GetFireMode()) or 0
-    local weapon_section = weapon:section()
-    local selector_type = table.concat({ weapon_section, firemode_upgrade }, "_")
+    local selector_type = table.concat({ weapon:section(), firemode_upgrade }, "_")
 
-    return fire_mode, selector_type, weapon_section
-end
-
-function get_animation_duration(section)
-    local hud_sec = ini_sys:r_string_ex(section, "hud")
-    local anim_data = parse_list(ini_sys, hud_sec, "anm_switch_mode")
-    return tonumber(anim_data[3] or 0)
+    return fire_mode, selector_type
 end
 
 function get_multiple_fire_modes_and_upgrade(weapon)

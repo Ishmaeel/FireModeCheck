@@ -21,8 +21,6 @@ function show_indicator(firing_mode, weapon_section)
 	weapon_parent_section = ini_sys:r_string_ex(weapon_section, "parent_section") or weapon_section
 	indicator_type = defs_ini:r_string_ex("selector_types", weapon_parent_section)
 
-	printf("= Indicator type for %s (%s) is %s", weapon_section, weapon_parent_section, indicator_type)
-
 	icon_type = selector_types[indicator_type] or 0
 	row_offset = icon_type * tile_size
 
@@ -30,7 +28,7 @@ function show_indicator(firing_mode, weapon_section)
 	col_offset = icon_index * tile_size
 
 	firing_mode_indicator:SetTextureRect(Frect():set(col_offset, row_offset, col_offset + tile_size, row_offset + tile_size))
-	firing_mode_indicator:Show(true);
+	firing_mode_indicator:Show(true)
 end
 
 function hide_all()

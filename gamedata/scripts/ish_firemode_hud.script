@@ -14,10 +14,6 @@ local firing_mode_indicator
 local firing_mode_text
 
 function show_text(firing_mode)
-	if not firing_mode_text then
-		activate_hud()
-	end
-
 	firing_mode_text:TextControl():SetTextST(firing_mode)
 
 	CreateTimeEvent("fmc_event", "fmc_hide_text", ish_firemode.display_duration, hide_text)
@@ -29,10 +25,6 @@ function hide_text(firing_mode)
 end
 
 function show_indicator(firing_mode, weapon_section)
-	if not firing_mode_indicator then
-		activate_hud()
-	end
-
 	weapon_parent_section = ini_sys:r_string_ex(weapon_section, "parent_section") or weapon_section
 	indicator_type = defs_ini:r_string_ex("selector_types", weapon_parent_section)
 
@@ -56,15 +48,13 @@ function hide_indicator()
 end
 
 function activate_hud()
-	RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
-
 	if HUD == nil then
 		HUD = FireModeHUD()
 		get_hud():AddDialogToRender(HUD)
 	end
 end
 
-function actor_on_net_destroy()
+function deactivate_hud()
 	if HUD ~= nil then
 		get_hud():RemoveDialogToRender(HUD)
 		HUD = nil
@@ -79,6 +69,7 @@ function FireModeHUD:__init() super()
 
 	firing_mode_indicator = xml:InitStatic("fireMode", self)
 	firing_mode_indicator:InitTexture("ui\\indicators")
+	firing_mode_indicator:Show(false)
 
 	firing_mode_text = xml:InitStatic("fireMode_text", self)
 	firing_mode_text:TextControl():SetTextST("")

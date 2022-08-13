@@ -203,6 +203,11 @@ end
 
 function actor_on_first_update()
     on_option_change()
+    ish_firemode_hud.activate_hud()
+end
+
+function actor_on_net_destroy()
+    ish_firemode_hud.deactivate_hud()
 end
 
 function on_option_change()
@@ -262,6 +267,7 @@ function perform_setup()
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
     RegisterScriptCallback("on_option_change", on_option_change)
     RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
+    RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
 end
 
 function do_not_mess_with_the_input()

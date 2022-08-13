@@ -129,6 +129,8 @@ function show_firemode_delayed()
         if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
             show_indicator(mode_description, selector_type)
         end
+    else
+        hide_after = 0
     end
 
     if time_global() >= hide_after then
@@ -142,7 +144,6 @@ end
 
 function hide_firemode_delayed()
     hide_all()
-
     return true
 end
 

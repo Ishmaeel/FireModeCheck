@@ -7,7 +7,7 @@ firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] 
 user_modes = { "firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check" }
 suppress_modes = { "suppress_key_basic_check", "suppress_key_dual_key_check", "suppress_key_single_key_check" }
 
-display_duration = 4 -- seconds
+local display_duration = 3 -- seconds
 
 local DISPLAY_TEXT = 1
 local DISPLAY_IMAGE = 2
@@ -122,7 +122,15 @@ function show_firemode_delayed()
         if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
             show_indicator(mode_description, selector_type)
         end
+
+        CreateTimeEvent("firemode_check", "hide_firemode_delayed", display_duration, hide_firemode_delayed)
     end
+
+    return true
+end
+
+function hide_firemode_delayed()
+    hide_all()
 
     return true
 end
@@ -198,6 +206,12 @@ end
 function show_indicator(indicator, weapon_section)
     if indicator and ish_firemode_hud then
         ish_firemode_hud.show_indicator(indicator, weapon_section)
+    end
+end
+
+function hide_all()
+    if ish_firemode_hud then
+        ish_firemode_hud.hide_all()
     end
 end
 

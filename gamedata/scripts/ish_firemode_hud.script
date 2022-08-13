@@ -15,13 +15,6 @@ local firing_mode_text
 
 function show_text(firing_mode)
 	firing_mode_text:TextControl():SetTextST(firing_mode)
-
-	CreateTimeEvent("fmc_event", "fmc_hide_text", ish_firemode.display_duration, hide_text)
-end
-
-function hide_text(firing_mode)
-	show_text("")
-	return true
 end
 
 function show_indicator(firing_mode, weapon_section)
@@ -38,13 +31,11 @@ function show_indicator(firing_mode, weapon_section)
 
 	firing_mode_indicator:SetTextureRect(Frect():set(col_offset, row_offset, col_offset + tile_size, row_offset + tile_size))
 	firing_mode_indicator:Show(true);
-
-	CreateTimeEvent("fmc_event", "fmc_hide_indicator", ish_firemode.display_duration, hide_indicator)
 end
 
-function hide_indicator()
+function hide_all()
 	firing_mode_indicator:Show(false)
-	return true
+	show_text("")
 end
 
 function activate_hud()

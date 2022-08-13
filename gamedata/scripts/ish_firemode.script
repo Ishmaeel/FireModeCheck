@@ -8,6 +8,7 @@ user_modes = { "firemode_handler_basic_check", "firemode_handler_dual_key_check"
 suppress_modes = { "suppress_key_basic_check", "suppress_key_dual_key_check", "suppress_key_single_key_check" }
 
 local display_duration = 3 -- seconds
+local hide_after = 0
 
 local DISPLAY_TEXT = 1
 local DISPLAY_IMAGE = 2
@@ -106,7 +107,13 @@ function suppress_key_single_key_check()
 end
 
 function show_firemode()
-    CreateTimeEvent("firemode_check", "show_firemode_delayed", 0, show_firemode_delayed)
+    hide_after = time_global() + display_duration * 1000
+    CreateTimeEvent("firemode_check", "show_firemode_delayed", 0.0, show_firemode_delayed)
+end
+
+function show_firemode_refresh()
+    CreateTimeEvent("firemode_check", "show_firemode_delayed", 0.1, show_firemode_delayed)
+    return true
 end
 
 function show_firemode_delayed()
@@ -122,8 +129,12 @@ function show_firemode_delayed()
         if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
             show_indicator(mode_description, selector_type)
         end
+    end
 
-        CreateTimeEvent("firemode_check", "hide_firemode_delayed", display_duration, hide_firemode_delayed)
+    if time_global() >= hide_after then
+        CreateTimeEvent("firemode_check", "hide_firemode_delayed", 0, hide_firemode_delayed)
+    else
+        CreateTimeEvent("firemode_check", "show_firemode_refresh", 0, show_firemode_refresh)
     end
 
     return true

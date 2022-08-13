@@ -13,13 +13,15 @@ local HUD = nil
 local firing_mode_indicator
 local firing_mode_text
 
+local cached_types = {}
+
 function show_text(firing_mode)
 	firing_mode_text:TextControl():SetTextST(firing_mode)
 end
 
 function show_indicator(firing_mode, weapon_section)
 	weapon_parent_section = ini_sys:r_string_ex(weapon_section, "parent_section") or weapon_section
-	indicator_type = defs_ini:r_string_ex("selector_types", weapon_parent_section)
+	indicator_type = get_indicator_type(weapon_parent_section)
 
 	icon_type = selector_types[indicator_type] or 0
 	row_offset = icon_type * tile_size
@@ -48,6 +50,21 @@ function deactivate_hud()
 		get_hud():RemoveDialogToRender(HUD)
 		HUD = nil
 	end
+end
+
+function get_indicator_type(weapon_parent_section)
+	local indicator_type = cached_types[weapon_parent_section]
+
+	if not indicator_type then
+		indicator_type = defs_ini:r_string_ex("selector_types", weapon_parent_section)
+		cached_types[weapon_parent_section] = indicator_type or "NONE"
+
+		if not indicator_type then
+			printf('= [ISH.FireModeCheck] Indicator type undefined: "%s"', weapon_parent_section)
+		end
+	end
+
+	return indicator_type
 end
 
 class "FireModeHUD" (CUIScriptWnd)

@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.13
+-- Last modified: 2022.08.19
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -168,9 +168,11 @@ function get_fire_mode_data()
     end
 
     local cWeapon = weapon:cast_Weapon()
+    local root_section = weapon:section()
+    root_section = ini_sys:r_string_ex(root_section, "parent_section") or root_section
 
     local fire_mode = (cWeapon and cWeapon:GetFireMode()) or 0
-    local selector_type = table.concat({ weapon:section(), firemode_upgrade }, "_")
+    local selector_type = table.concat({ root_section, firemode_upgrade }, "_")
 
     return fire_mode, selector_type
 end

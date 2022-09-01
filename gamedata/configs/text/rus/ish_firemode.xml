@@ -26,25 +26,25 @@
 	<string id="ui_mcm_fireModeCheck_hideGui_desc">
 		<text>Скрыть индикатор переводчика огня, предоставляемый в игре поумолчанию.</text>
 	</string>
-	<string id="ui_mcm_lst_disabled">
+	<string id="ui_mcm_lst_fireModeCheck_disabled">
 		<text>%c[ui_gray]Отключено</text>
 	</string>
-	<string id="ui_mcm_lst_basic">
+	<string id="ui_mcm_lst_fireModeCheck_basic">
 		<text>Основной</text>
 	</string>
-	<string id="ui_mcm_lst_dual_key">
+	<string id="ui_mcm_lst_fireModeCheck_dual_key">
 		<text>Двойная клавиша</text>
 	</string>
-	<string id="ui_mcm_lst_single_key">
+	<string id="ui_mcm_lst_fireModeCheck_single_key">
 		<text>Одна клавиша (рекомендуется)</text>
 	</string>
-	<string id="ui_mcm_lst_full">
+	<string id="ui_mcm_lst_fireModeCheck_full">
 		<text>Полный</text>
 	</string>
-	<string id="ui_mcm_lst_text_only">
+	<string id="ui_mcm_lst_fireModeCheck_text_only">
 		<text>Только текст</text>
 	</string>
-	<string id="ui_mcm_lst_image_only">
+	<string id="ui_mcm_lst_fireModeCheck_image_only">
 		<text>Только изображение</text>
 	</string>
 </string_table>

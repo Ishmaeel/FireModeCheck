@@ -26,25 +26,25 @@
 	<string id="ui_mcm_fireModeCheck_hideGui_desc">
 		<text>Hide the on-screen firing mode indicator provided by the vanilla HUD.</text>
 	</string>
-	<string id="ui_mcm_lst_disabled">
+	<string id="ui_mcm_lst_fireModeCheck_disabled">
 		<text>%c[ui_gray]Disabled</text>
 	</string>
-	<string id="ui_mcm_lst_basic">
+	<string id="ui_mcm_lst_fireModeCheck_basic">
 		<text>Basic</text>
 	</string>
-	<string id="ui_mcm_lst_dual_key">
+	<string id="ui_mcm_lst_fireModeCheck_dual_key">
 		<text>Dual Key</text>
 	</string>
-	<string id="ui_mcm_lst_single_key">
+	<string id="ui_mcm_lst_fireModeCheck_single_key">
 		<text>Single Key (recommended)</text>
 	</string>
-	<string id="ui_mcm_lst_full">
+	<string id="ui_mcm_lst_fireModeCheck_full">
 		<text>Full</text>
 	</string>
-	<string id="ui_mcm_lst_text_only">
+	<string id="ui_mcm_lst_fireModeCheck_text_only">
 		<text>Text only</text>
 	</string>
-	<string id="ui_mcm_lst_image_only">
+	<string id="ui_mcm_lst_fireModeCheck_image_only">
 		<text>Image only</text>
 	</string>
 </string_table>

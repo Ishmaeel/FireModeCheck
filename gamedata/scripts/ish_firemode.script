@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.19
+-- Last modified: 2024.10.18
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -22,9 +22,6 @@ local _display_Mode = DISPLAY_TEXT + DISPLAY_IMAGE
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
-
-local disable_input = nil
-local enable_input = nil
 
 function on_game_start()
     perform_setup()
@@ -58,7 +55,7 @@ end
 -- NEXT key works normally. PREV key blocks the switch and just reports firing mode.
 function firemode_handler_dual_key_check()
     if _last_bind == k_PREV then
-        disable_input()
+        --disable_input()
     else
         _mute_switch = false
     end
@@ -74,7 +71,7 @@ function firemode_handler_single_key_check()
         _tap_count = 0
         _mute_switch = false
     else
-        disable_input()
+        --disable_input()
         reset_taps()
     end
 
@@ -117,7 +114,7 @@ function show_firemode_refresh()
 end
 
 function show_firemode_delayed()
-    enable_input()
+    --enable_input()
     local current_mode, selector_type = get_fire_mode_data()
     local mode_description = firing_mode_descriptions[current_mode]
 
@@ -255,7 +252,7 @@ end
 function take_hostages()
     -- if GFMSS is installed, monkey patch its key press handler and take it hostage.
     if void_fmode_sound and void_fmode_sound.on_key_press then
-        on_key_press_relay = void_fmode_sound.on_key_press -- take this and wait for my signal!
+        on_key_press_relay = void_fmode_sound.on_key_press      -- take this and wait for my signal!
         void_fmode_sound.on_key_press = on_key_press_gatekeeper -- not a peep unless I say so!
     end
 end
@@ -268,29 +265,10 @@ function on_key_press_gatekeeper(key)
     -- just a void function. it will effectively disable GFMSS on_key_press.
 end
 
---------------------------------------------------------------------------------------------------------------
-------                            Compatibility section for 1.5.1 and 1.5.2                             ------
---------------------------------------------------------------------------------------------------------------
-
 function perform_setup()
-    local modern_mode = (axr_main.callback_add ~= nil)
-
-    if modern_mode then
-        enable_input = do_not_mess_with_the_input
-        disable_input = do_not_mess_with_the_input
-
-        RegisterScriptCallback("on_before_key_press", ishy_on_before_key_press)
-    else
-        enable_input = level.enable_input
-        disable_input = level.disable_input
-    end
-
+    RegisterScriptCallback("on_before_key_press", ishy_on_before_key_press)
     RegisterScriptCallback("on_key_press", ishy_on_key_press)
     RegisterScriptCallback("on_option_change", on_option_change)
     RegisterScriptCallback("actor_on_first_update", actor_on_first_update)
     RegisterScriptCallback("actor_on_net_destroy", actor_on_net_destroy)
-end
-
-function do_not_mess_with_the_input()
-    -- just a void function. Anomaly 1.5.2 has a better way to cancel a keypress.
 end

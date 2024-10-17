@@ -22,13 +22,7 @@
 		"runOnSave.commands": [
 			{
 				"match": "gamedata",
-				"command": "xcopy ${workspaceFolder}\\gamedata C:\\Games\\MO2-Anomaly\\mods\\INSERT_MOD_NAME_HERE\\gamedata /DICEY",
-				"runIn": "backend",
-				"finishStatusMessage": "Gamedata content copied."
-			},
-			{
-				"match": "gamedata",
-				"command": "xcopy ${workspaceFolder}\\gamedata C:\\Games\\MO2-AnomalyOld\\mods\\INSERT_MOD_NAME_HERE\\gamedata /DICEY",
+				"command": "xcopy ${workspaceFolder}\\gamedata C:\\Games\\MO2-Anomaly3\\mods\\FireModeCheck_DEV\\gamedata /DICEY",
 				"runIn": "backend",
 				"finishStatusMessage": "Gamedata content copied."
 			}

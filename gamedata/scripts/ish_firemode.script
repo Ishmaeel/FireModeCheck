@@ -13,7 +13,6 @@ local DISPLAY_TEXT = 1
 local DISPLAY_IMAGE = 2
 
 local _tap_count = 0
-local _mute_switch = false
 local _hide_gui = false
 local _suppress_mode = nil
 local _display_Mode = DISPLAY_TEXT + DISPLAY_IMAGE
@@ -23,7 +22,6 @@ local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
 
 function on_game_start()
     perform_setup()
-    take_hostages()
 end
 
 function ishy_on_key_press(key)
@@ -31,10 +29,6 @@ function ishy_on_key_press(key)
 
     if bind == k_PREV or bind == k_NEXT then
         _last_bind = bind
-
-        if not _mute_switch then
-            on_key_press_relay(key)
-        end
     end
 end
 
@@ -50,7 +44,6 @@ end
 
 -- basic mode: Just reports the new firing mode and lets the switch happen normally.
 function suppress_key_basic_check()
-    _mute_switch = false
     show_firemode()
 
     return false
@@ -58,12 +51,6 @@ end
 
 -- dual mode: NEXT key works normally. PREV key blocks the switch and just reports firing mode.
 function suppress_key_dual_key_check()
-    if _last_bind == k_PREV then
-        -- do nothing
-    else
-        _mute_switch = false
-    end
-
     show_firemode()
 
     return (_last_bind == k_PREV)
@@ -75,7 +62,6 @@ function suppress_key_single_key_check()
 
     if _tap_count > 1 then
         _tap_count = 0
-        _mute_switch = false
     else
         reset_taps()
     end
@@ -222,27 +208,6 @@ function toggle_firemode_gui()
     pos = ActorMenu.get_maingame().m_ui_hud_states.m_fire_mode:GetWndPos()
     pos.x = ((_hide_gui and pos.x > 0) or ((not _hide_gui) and pos.x < 0)) and (-1 * pos.x) or pos.x -- Raven, no!
     ActorMenu.get_maingame().m_ui_hud_states.m_fire_mode:SetWndPos(pos)
-end
-
---------------------------------------------------------------------------------------------------------------
------- Compatibility section for General Fire Mode Switcher Sound (GFMSS) by TheVoidPancake + HarukaSai ------
-------      https://www.moddb.com/mods/stalker-anomaly/addons/general-fire-mode-switcher-sound           -----
---------------------------------------------------------------------------------------------------------------
-
-function take_hostages()
-    -- if GFMSS is installed, monkey patch its key press handler and take it hostage.
-    if void_fmode_sound and void_fmode_sound.on_key_press then
-        on_key_press_relay = void_fmode_sound.on_key_press      -- take this and wait for my signal!
-        void_fmode_sound.on_key_press = on_key_press_gatekeeper -- not a peep unless I say so!
-    end
-end
-
-function on_key_press_relay(key)
-    -- just a placeholder. it will be replaced with GFMSS on_key_press.
-end
-
-function on_key_press_gatekeeper(key)
-    -- just a void function. it will effectively disable GFMSS on_key_press.
 end
 
 function perform_setup()

@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2024.10.18
+-- Last modified: 2024.10.19
 -- https://github.com/Ishmaeel/FireModeCheck
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
@@ -14,8 +14,8 @@ local DISPLAY_IMAGE = 2
 
 local _tap_count = 0
 local _hide_gui = false
-local _current_handler = nil
-local _display_Mode = DISPLAY_TEXT + DISPLAY_IMAGE
+local _user_mode_id = 3
+local _display_mode = DISPLAY_TEXT + DISPLAY_IMAGE
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
 local k_NEXT = key_bindings.kWPN_FIREMODE_NEXT
@@ -26,7 +26,7 @@ end
 
 function ishy_on_before_key_press(dik, bind, dis, flags)
     if bind == k_PREV or bind == k_NEXT then
-        keypress_handler = this[_current_handler]
+        keypress_handler = this[handler_functions[_user_mode_id]]
         if keypress_handler then
             local allow_keypress = keypress_handler(bind)
             flags.ret_value = allow_keypress
@@ -78,11 +78,11 @@ function show_firemode_delayed()
     local mode_description = firing_mode_descriptions[current_mode]
 
     if mode_description then
-        if bit_and(_display_Mode, DISPLAY_TEXT) > 0 then
+        if bit_and(_display_mode, DISPLAY_TEXT) > 0 then
             show_message(mode_description)
         end
 
-        if bit_and(_display_Mode, DISPLAY_IMAGE) > 0 then
+        if bit_and(_display_mode, DISPLAY_IMAGE) > 0 then
             show_indicator(mode_description, selector_type)
         end
     else
@@ -188,10 +188,9 @@ function actor_on_net_destroy()
 end
 
 function on_option_change()
-    local user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
-    _current_handler = handler_functions[user_mode_id]
+    _user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
     _hide_gui = (ui_mcm and ui_mcm.get("fireModeCheck/hideGui")) or (not ui_mcm and true)
-    _display_Mode = (ui_mcm and ui_mcm.get("fireModeCheck/displayMode")) or DISPLAY_TEXT + DISPLAY_IMAGE
+    _display_mode = (ui_mcm and ui_mcm.get("fireModeCheck/displayMode")) or DISPLAY_TEXT + DISPLAY_IMAGE
 
     toggle_firemode_gui()
 end

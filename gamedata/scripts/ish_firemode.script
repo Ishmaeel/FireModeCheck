@@ -28,7 +28,7 @@ function ishy_on_before_key_press(dik, bind, dis, flags)
     if bind == k_PREV or bind == k_NEXT then
         keypress_handler = this[_current_handler]
         if keypress_handler then
-            local allow_keypress = not keypress_handler(bind)
+            local allow_keypress = keypress_handler(bind)
             flags.ret_value = allow_keypress
         end
     end
@@ -38,14 +38,14 @@ end
 function handler_basic()
     show_firemode()
 
-    return false
+    return true
 end
 
 -- dual mode: NEXT key works normally. PREV key blocks the switch and just reports firing mode.
 function handler_dual_key(bind)
     show_firemode()
 
-    return (bind == k_PREV)
+    return (bind ~= k_PREV)
 end
 
 -- single mode: Both keys function in the same way: Single tap: check only. Double tap, switch to next mode.
@@ -60,7 +60,7 @@ function handler_single_key()
         reset_taps_after_delay()
     end
 
-    return (_tap_count == 1)
+    return (_tap_count == 0)
 end
 
 function show_firemode()

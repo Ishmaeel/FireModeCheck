@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.08.19
+-- Last modified: 2024.10.19
 -- https://github.com/Ishmaeel/FireModeCheck
 
 local firing_mode_icons = { ["Single"] = 0, ["Burst"] = 1, ["Full-Auto"] = 2 }

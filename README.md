@@ -13,4 +13,4 @@ Choose from three operation modes:
 
 By default, on-screen firing mode indicator is hidden and the *Single Key Mode* is active. This configuration can be changed via [MCM](https://www.moddb.com/mods/stalker-anomaly/addons/anomaly-mod-configuration-menu). 
 
-https://github.com/Ishmaeel/NitpickerModpack
+https://github.com/Ishmaeel/FireModeCheck

@@ -1,5 +1,5 @@
 -- FireModeCheck
--- Last modified: 2022.09.01
+-- Last modified: 2024.10.19
 -- https://github.com/Ishmaeel/FireModeCheck
 
 function on_mcm_load()

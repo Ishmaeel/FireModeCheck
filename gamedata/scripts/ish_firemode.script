@@ -11,10 +11,11 @@ local hide_after = 0
 
 local DISPLAY_TEXT = 1
 local DISPLAY_IMAGE = 2
+local SINGLE_KEY_MODE = 3
 
 local _tap_count = 0
 local _hide_gui = false
-local _user_mode_id = 3
+local _user_mode = SINGLE_KEY_MODE
 local _display_mode = DISPLAY_TEXT + DISPLAY_IMAGE
 
 local k_PREV = key_bindings.kWPN_FIREMODE_PREV
@@ -26,7 +27,7 @@ end
 
 function ishy_on_before_key_press(dik, bind, dis, flags)
     if bind == k_PREV or bind == k_NEXT then
-        keypress_handler = this[handler_functions[_user_mode_id]]
+        keypress_handler = this[handler_functions[_user_mode]]
         if keypress_handler then
             local allow_keypress = keypress_handler(bind)
             flags.ret_value = allow_keypress
@@ -188,7 +189,7 @@ function actor_on_net_destroy()
 end
 
 function on_option_change()
-    _user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
+    _user_mode = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or SINGLE_KEY_MODE
     _hide_gui = (ui_mcm and ui_mcm.get("fireModeCheck/hideGui")) or (not ui_mcm and true)
     _display_mode = (ui_mcm and ui_mcm.get("fireModeCheck/displayMode")) or DISPLAY_TEXT + DISPLAY_IMAGE
 

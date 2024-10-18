@@ -4,7 +4,6 @@
 
 firing_mode_descriptions = { [1] = "Single", [2] = "Burst", [3] = "Burst", [-1] = "Full-Auto" }
 
-user_modes = { "firemode_handler_basic_check", "firemode_handler_dual_key_check", "firemode_handler_single_key_check" }
 suppress_modes = { "suppress_key_basic_check", "suppress_key_dual_key_check", "suppress_key_single_key_check" }
 
 local display_duration = 3 -- seconds
@@ -16,7 +15,6 @@ local DISPLAY_IMAGE = 2
 local _tap_count = 0
 local _mute_switch = false
 local _hide_gui = false
-local _user_mode = nil
 local _suppress_mode = nil
 local _display_Mode = DISPLAY_TEXT + DISPLAY_IMAGE
 
@@ -34,12 +32,6 @@ function ishy_on_key_press(key)
     if bind == k_PREV or bind == k_NEXT then
         _last_bind = bind
 
-        handler = this[_user_mode]
-        if handler then
-            _mute_switch = true -- Make sure GFMSS does not play audio unless we actually allow mode switch.
-            handler()
-        end
-
         if not _mute_switch then
             on_key_press_relay(key)
         end
@@ -48,34 +40,14 @@ end
 
 -- Do nothing. Just report the new firing mode after letting the switch go through.
 function firemode_handler_basic_check()
-    _mute_switch = false
-    show_firemode()
 end
 
 -- NEXT key works normally. PREV key blocks the switch and just reports firing mode.
 function firemode_handler_dual_key_check()
-    if _last_bind == k_PREV then
-        --disable_input()
-    else
-        _mute_switch = false
-    end
-
-    show_firemode()
 end
 
 -- Both keys function in the same way: Single tap: check only. Double tap, switch to next/prev mode.
 function firemode_handler_single_key_check()
-    _tap_count = (_tap_count or 0) + 1
-
-    if _tap_count > 1 then
-        _tap_count = 0
-        _mute_switch = false
-    else
-        --disable_input()
-        reset_taps()
-    end
-
-    show_firemode()
 end
 
 function ishy_on_before_key_press(dik, bind, dis, flags)
@@ -90,16 +62,39 @@ end
 
 -- basic mode never prevents firemode change
 function suppress_key_basic_check()
+    _mute_switch = false
+    show_firemode()
+
     return false
 end
 
 -- dual mode only prevents firemode change with the PREV key
 function suppress_key_dual_key_check()
+    if _last_bind == k_PREV then
+        --disable_input()
+    else
+        _mute_switch = false
+    end
+
+    show_firemode()
+
     return (_last_bind == k_PREV)
 end
 
 -- single mode only prevents firemode change for the first tap
 function suppress_key_single_key_check()
+    _tap_count = (_tap_count or 0) + 1
+
+    if _tap_count > 1 then
+        _tap_count = 0
+        _mute_switch = false
+    else
+        --disable_input()
+        reset_taps()
+    end
+
+    show_firemode()
+
     return (_tap_count == 1)
 end
 
@@ -230,7 +225,6 @@ end
 
 function on_option_change()
     local user_mode_id = (ui_mcm and ui_mcm.get("fireModeCheck/userMode")) or 3
-    _user_mode = user_modes[user_mode_id]
     _suppress_mode = suppress_modes[user_mode_id]
     _hide_gui = (ui_mcm and ui_mcm.get("fireModeCheck/hideGui")) or (not ui_mcm and true)
     _display_Mode = (ui_mcm and ui_mcm.get("fireModeCheck/displayMode")) or DISPLAY_TEXT + DISPLAY_IMAGE

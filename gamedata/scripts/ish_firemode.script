@@ -50,15 +50,15 @@ end
 
 -- single mode: Both keys function in the same way: Single tap: check only. Double tap, switch to next mode.
 function handler_single_key()
+    show_firemode()
+
     _tap_count = (_tap_count or 0) + 1
 
     if _tap_count > 1 then
-        _tap_count = 0
+        reset_taps_immediately()
     else
-        reset_taps()
+        reset_taps_after_delay()
     end
-
-    show_firemode()
 
     return (_tap_count == 1)
 end
@@ -103,11 +103,11 @@ function hide_firemode_delayed()
     return true
 end
 
-function reset_taps()
-    CreateTimeEvent("firemode_check", "reset_taps_delayed", 0.5, reset_taps_delayed)
+function reset_taps_after_delay()
+    CreateTimeEvent("firemode_check", "reset_taps_delayed", 0.5, reset_taps_immediately)
 end
 
-function reset_taps_delayed()
+function reset_taps_immediately()
     _tap_count = 0
     return true
 end

@@ -125,7 +125,7 @@ function get_fire_mode_data()
 
     local cWeapon = weapon:cast_Weapon()
     local root_section = weapon:section()
-    root_section = ini_sys:r_string_ex(root_section, "parent_section") or root_section
+    root_section = ini_sys and ini_sys:r_string_ex(root_section, "parent_section") or root_section
 
     local fire_mode = (cWeapon and cWeapon:GetFireMode()) or 0
     local selector_type = table.concat({ root_section, firemode_upgrade }, "_")
@@ -146,7 +146,7 @@ function get_multiple_fire_modes_and_upgrade(weapon)
     end
 
     weapon:iterate_installed_upgrades(function(upgr_sec)
-        local upgr_prop_sec = ini_sys:r_string_ex(upgr_sec, "section")
+        local upgr_prop_sec = ini_sys and ini_sys:r_string_ex(upgr_sec, "section")
         if upgr_prop_sec then
             local upgr_fire_modes = parse_list(ini_sys, upgr_prop_sec, "fire_modes")
             if upgr_fire_modes and table.getn(upgr_fire_modes) > 1 then

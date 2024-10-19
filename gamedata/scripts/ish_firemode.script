@@ -180,8 +180,8 @@ function hide_all()
 end
 
 function actor_on_first_update()
-    on_option_change()
     ish_firemode_hud.activate_hud()
+    on_option_change()
 end
 
 function actor_on_net_destroy()
@@ -194,6 +194,7 @@ function on_option_change()
     _display_mode = (ui_mcm and ui_mcm.get("fireModeCheck/displayMode")) or DISPLAY_TEXT + DISPLAY_IMAGE
 
     toggle_firemode_gui()
+    hide_all()
 end
 
 function toggle_firemode_gui()

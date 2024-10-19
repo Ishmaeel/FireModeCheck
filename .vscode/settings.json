@@ -30,7 +30,8 @@
     ],
     "Lua.diagnostics.disable": [
         "deprecated",
-        "lowercase-global"
+        "lowercase-global",
+        "undefined-field"
     ],
     "Lua.format.defaultConfig": {
         "max_line_length": "300"
